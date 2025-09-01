@@ -1,4 +1,4 @@
 package TP1.Factory;
 
-public class FactoryDAO {
+public abstract class FactoryDAO {
 }
