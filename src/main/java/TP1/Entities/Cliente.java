@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-public class Cliente implements ClienteDAO {
+public class Cliente{
     private int idCliente;
     private String nombre;
     private String email;

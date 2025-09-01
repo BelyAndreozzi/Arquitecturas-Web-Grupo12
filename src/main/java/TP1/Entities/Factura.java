@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 
-public class Factura implements FacturaDAO {
+public class Factura  {
     private int idFactura;
     private int idProducto;
     private int cantidad;

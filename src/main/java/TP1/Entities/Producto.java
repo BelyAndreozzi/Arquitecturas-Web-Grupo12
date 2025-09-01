@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-public class Producto implements ProductoDAO {
+public class Producto {
     private int idProducto;
     private String nombre;
     private float valor;

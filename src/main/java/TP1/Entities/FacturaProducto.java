@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-public class FacturaProducto implements FacturaProductoDAO {
+public class FacturaProducto {
     private int idFactura;
     private int idProducto;
     private int cantidad;
