@@ -1,7 +1,6 @@
 package TP1.Repository.MySQL;
 
 import TP1.DAO.FacturaDAO;
-import TP1.Entities.Cliente;
 import TP1.Entities.Factura;
 
 import java.sql.*;
