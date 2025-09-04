@@ -4,8 +4,7 @@ import TP1.DAO.FacturaDAO;
 import TP1.Entities.Factura;
 
 import java.sql.*;
-import java.sql.Connection;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FacturaDAOMySQL implements FacturaDAO {
@@ -17,177 +16,108 @@ public class FacturaDAOMySQL implements FacturaDAO {
     }
 
     private void crearTablasSiNoExisten() {
-        final String query = "CREATE TABLE IF NOT EXISTS Factura (" +
-                "idFactura INT PRIMARY KEY AUTO_INCREMENT, " +
-                "idCliente INT NOT NULL, " +
-                "FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente))";
+         final String query =
+            "CREATE TABLE IF NOT EXISTS Factura(" +
+            "idFactura INT NOT NULL," +
+            "idProducto INT NOT NULL," +
+            "cantidad INT NOT NULL," +
+            "PRIMARY KEY(idFactura)";
 
-        try(Statement st = conn.createStatement()){
-            st.execute(query);
-            conn.commit();
+         try(Statement st = conn.createStatement()) {
+             st.execute(query);
+             conn.commit();
 
-        }catch(SQLException e){
-            throw new RuntimeException("Error al crear la tabla Factura", e);
-        }
+         }catch(SQLException e) {
+             throw new RuntimeException("Error al crear la tabla factura", e);
+         }
     }
-
-    @Override
     public void insert(Factura factura) {
         String query = "INSERT INTO Factura(idFactura, idCliente) VALUES (?, ?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
+        try(PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, factura.getIdFactura());
             ps.setInt(2, factura.getIdCliente());
             ps.executeUpdate();
+            ps.close();
             conn.commit();
-            System.out.println("Factura insertada exitosamente.");
-        } catch (SQLException e) {
+            System.out.println("factura insertada exitosamente");
+        } catch (Exception e) {
+            try {
+                conn.rollback();//Revierte si algo falla y no cierra la conexion
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             throw new RuntimeException("Error al insertar la factura", e);
         }
     }
 
-    @Override
     public boolean update(Factura factura) {
-        String query = "UPDATE Factura SET idCliente = ? WHERE idFactura = ?";
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, factura.getIdCliente());
-            ps.setInt(2, factura.getIdFactura());
+        String query = "UPDATE Factura SET idFactura = ?, idCliente = ?";
+        try(PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, factura.getIdFactura());
+            ps.setInt(2, factura.getIdCliente());
 
-            int filasActualizadas = ps.executeUpdate();
+            int filas_actualizadas = ps.executeUpdate();
             conn.commit();
+            conn.close();
+            return filas_actualizadas > 0;
 
-            return filasActualizadas > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualizar la factura", e);
         }
+
     }
 
-    @Override
     public boolean delete(Integer id) {
         String query = "DELETE FROM Factura WHERE idFactura = ?";
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
 
+        try(PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, id);
             int filasActualizadas = ps.executeUpdate();
             conn.commit();
+            conn.close();
 
             return filasActualizadas > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar la factura", e);
+            throw new RuntimeException("Error al eliminar el factura", e);
         }
     }
 
-    @Override
     public Factura get(Integer id) {
-        String query = "SELECT idFactura, idCliente FROM Factura WHERE idFactura = ?";
-        Factura factura = null;
+        String query = "SELECT * FROM factura WHERE idFactura = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    factura = new Factura(
-                            rs.getInt("idFactura"),
-                            rs.getInt("idCliente")
-                    );
-                }
+                Factura factura = new Factura(
+                        rs.getInt("idFactura"),
+                        rs.getInt("idCliente")
+                );
+                return factura;
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener la factura", e);
-        }
-        return null;
 
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al mostrar la factura", e);
+        }
     }
+
 
     @Override
     public List<Factura> getAll() {
-        String query = "SELECT idFactura, idCliente FROM Factura";
-        List<Factura> facturas = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
+        String query = "SELECT * FROM factura";
+        List<Factura> facturas = new LinkedList<>();
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+           while(rs.next()) {
                 Factura factura = new Factura(
                         rs.getInt("idFactura"),
                         rs.getInt("idCliente")
                 );
                 facturas.add(factura);
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener todas las facturas", e);
+            throw new RuntimeException("Error al mostrar las facturas", e);
         }
         return facturas;
     }
-
-    public List<Factura> getByClienteId(int clienteId) {
-        String query = "SELECT idFactura, idCliente FROM Factura WHERE idCliente = ?";
-        List<Factura> facturas = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, clienteId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Factura factura = new Factura(
-                            rs.getInt("idFactura"),
-                            rs.getInt("idCliente")
-                    );
-                    facturas.add(factura);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener las facturas por idCliente", e);
-        }
-        return facturas;
-    }
-
-    @Override
-    public List<Factura> getFacturasPorCliente(int idCliente) {
-        String query = "SELECT idFactura, idCliente " +
-                "FROM factura WHERE idCliente = ? " +
-                "ORDER BY idFactura";
-
-        List<Factura> facturas = new ArrayList<>();
-
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, idCliente);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Factura factura = new Factura(
-                            rs.getInt("idFactura"),
-                            rs.getInt("idCliente")
-                    );
-                    facturas.add(factura);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener facturas por cliente", e);
-        }
-
-        return facturas;
-    }
-
-    @Override
-    public double getTotalFactura(int idFactura) {
-        String query = "SELECT SUM(f.cantidad * p.valor) as total " +
-                "FROM factura f " +
-                "JOIN producto p ON f.idProducto = p.idProducto " +
-                "WHERE f.idCliente = ?";
-
-        double total = 0.0;
-
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, idFactura);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    total = rs.getDouble("total");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al calcular el total facturado por cliente", e);
-        }
-
-        return total;
-
-    }
-    /*
-    */
 }

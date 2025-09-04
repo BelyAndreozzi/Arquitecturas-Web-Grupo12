@@ -1,7 +1,6 @@
 package TP1.Repository.MySQL;
 
 import TP1.DAO.ProductoDAO;
-import TP1.Entities.Cliente;
 import TP1.Entities.Producto;
 
 import java.util.List;
@@ -13,12 +12,12 @@ public class ProductoDAOMySQL implements ProductoDAO {
     }
 
     @Override
-    public void insert(Cliente entity) {
+    public void insert(Producto entity) {
 
     }
 
     @Override
-    public boolean update(Cliente entity) {
+    public boolean update(Producto entity) {
         return false;
     }
 
@@ -28,12 +27,12 @@ public class ProductoDAOMySQL implements ProductoDAO {
     }
 
     @Override
-    public Cliente get(Integer id) {
+    public Producto get(Integer id) {
         return null;
     }
 
     @Override
-    public List<Cliente> getAll() {
+    public List<Producto> getAll() {
         return List.of();
     }
 }
