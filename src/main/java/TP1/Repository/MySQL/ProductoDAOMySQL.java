@@ -8,31 +8,32 @@ import java.util.List;
 public class ProductoDAOMySQL implements ProductoDAO {
     @Override
     public Producto productoQueMasRecaudo() throws Exception {
+        /* NO HAGAN ESTE ASI LO HACEMOS TODOS JUNTOS <3 */
         return null;
     }
 
     @Override
-    public void insert(Producto entity) {
+    public void insertar(Producto producto) {
 
     }
 
     @Override
-    public boolean update(Producto entity) {
+    public boolean actualizar(Producto producto) {
         return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean borrar(Integer id) {
         return false;
     }
 
     @Override
-    public Producto get(Integer id) {
+    public Producto obtener(Integer id) {
         return null;
     }
 
     @Override
-    public List<Producto> getAll() {
+    public List<Producto> obtenerTodos() {
         return List.of();
     }
 }

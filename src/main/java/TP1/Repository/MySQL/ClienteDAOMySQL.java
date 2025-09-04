@@ -62,7 +62,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         return clientes;
     }
 
-    public void insert(Cliente cliente) {
+    public void insertar(Cliente cliente) {
         String query = "INSERT INTO Cliente(idCliente, nombre, email) VALUES (?, ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -78,7 +78,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
     }
 
-    public boolean update(Cliente cliente) {
+    public boolean actualizar(Cliente cliente) {
         String query = "UPDATE Cliente SET nombre =  ?, email = ? WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, cliente.getNombre());
@@ -96,7 +96,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
     }
 
 
-    public boolean delete(Integer id) {
+    public boolean borrar(Integer id) {
         String query = "DELETE FROM Cliente WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -112,7 +112,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
     }
 
 
-    public Cliente get(Integer id) {
+    public Cliente obtener(Integer id) {
         String query = "SELECT idCliente, nombre, email FROM Cliente WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -132,7 +132,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         return null; // si no encuentra nada
     }
 
-    public List<Cliente> getAll() {
+    public List<Cliente> obtenerTodos() {
         String query = "SELECT idCliente, nombre, email FROM Cliente";
         List<Cliente> clientes = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(query);

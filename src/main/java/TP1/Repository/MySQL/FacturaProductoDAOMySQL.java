@@ -1,34 +1,31 @@
 package TP1.Repository.MySQL;
 
-import TP1.DAO.ClienteDAO;
 import TP1.DAO.FacturaProductoDAO;
-import TP1.Entities.Cliente;
+import TP1.Entities.FacturaProducto;
 
 import java.util.List;
 
 public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
     @Override
-    public void insert(Cliente entity) {
-
-    }
+    public void insertar(FacturaProducto facturaProducto) {   }
 
     @Override
-    public boolean update(Cliente entity) {
+    public boolean actualizar(FacturaProducto facturaProducto) {
         return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean borrar(Integer id) {
         return false;
     }
 
     @Override
-    public Cliente get(Integer id) {
+    public FacturaProducto obtener(Integer id) {
         return null;
     }
 
     @Override
-    public List<Cliente> getAll() {
+    public List<FacturaProducto> obtenerTodos() {
         return List.of();
     }
 }

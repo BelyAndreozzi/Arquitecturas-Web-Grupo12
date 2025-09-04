@@ -31,7 +31,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
              throw new RuntimeException("Error al crear la tabla factura", e);
          }
     }
-    public void insert(Factura factura) {
+    public void insertar(Factura factura) {
         String query = "INSERT INTO Factura(idFactura, idCliente) VALUES (?, ?)";
 
         try(PreparedStatement ps = conn.prepareStatement(query)) {
@@ -51,7 +51,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
         }
     }
 
-    public boolean update(Factura factura) {
+    public boolean actualizar(Factura factura) {
         String query = "UPDATE Factura SET idFactura = ?, idCliente = ?";
         try(PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, factura.getIdFactura());
@@ -68,7 +68,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
 
     }
 
-    public boolean delete(Integer id) {
+    public boolean borrar(Integer id) {
         String query = "DELETE FROM Factura WHERE idFactura = ?";
 
         try(PreparedStatement ps = conn.prepareStatement(query)) {
@@ -83,7 +83,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
         }
     }
 
-    public Factura get(Integer id) {
+    public Factura obtener(Integer id) {
         String query = "SELECT * FROM factura WHERE idFactura = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -102,7 +102,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
 
 
     @Override
-    public List<Factura> getAll() {
+    public List<Factura> obtenerTodos() {
         String query = "SELECT * FROM factura";
         List<Factura> facturas = new LinkedList<>();
         try (PreparedStatement ps = conn.prepareStatement(query)) {

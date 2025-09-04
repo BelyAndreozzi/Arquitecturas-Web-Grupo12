@@ -3,9 +3,9 @@ package TP1.DAO;
 import java.util.List;
 
 public interface CRUD_DAO<T,K> {
-    void insert(T entity);
-    boolean update(T entity);
-    boolean delete(K id);
-    T get(K id);
-    List<T> getAll();
+    void insertar(T entity);
+    boolean actualizar(T entity);
+    boolean borrar(K id);
+    T obtener(K id);
+    List<T> obtenerTodos();
 }
