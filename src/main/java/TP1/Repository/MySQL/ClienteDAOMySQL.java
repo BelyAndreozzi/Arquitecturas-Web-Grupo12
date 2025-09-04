@@ -12,7 +12,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
 
     public ClienteDAOMySQL(Connection conn) {
         this.conn = conn;
-         crearTablasSiNoExisten();
+        crearTablasSiNoExisten();
     }
 
     private void crearTablasSiNoExisten() {
@@ -30,7 +30,6 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
     }
 
-    @Override
     public ArrayList<Cliente> clientesOrdenadosPorFacturacion() throws Exception {
         String query =
                 "SELECT c.idCliente, c.nombre, c.email, " +
@@ -63,7 +62,6 @@ public class ClienteDAOMySQL implements ClienteDAO {
         return clientes;
     }
 
-    @Override
     public void insert(Cliente cliente) {
         String query = "INSERT INTO Cliente(idCliente, nombre, email) VALUES (?, ?, ?)";
 
@@ -74,14 +72,12 @@ public class ClienteDAOMySQL implements ClienteDAO {
             ps.executeUpdate();
             ps.close();
             conn.commit();
-            System.out.println("Persona insertada exitosamente.");
+            System.out.println("Cliente insertado exitosamente");
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar el cliente", e);
         }
     }
 
-
-    @Override
     public boolean update(Cliente cliente) {
         String query = "UPDATE Cliente SET nombre =  ?, email = ? WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -99,7 +95,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
     }
 
-    @Override
+
     public boolean delete(Integer id) {
         String query = "DELETE FROM Cliente WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -115,7 +111,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
     }
 
-    @Override
+
     public Cliente get(Integer id) {
         String query = "SELECT idCliente, nombre, email FROM Cliente WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -136,7 +132,6 @@ public class ClienteDAOMySQL implements ClienteDAO {
         return null; // si no encuentra nada
     }
 
-    @Override
     public List<Cliente> getAll() {
         String query = "SELECT idCliente, nombre, email FROM Cliente";
         List<Cliente> clientes = new ArrayList<>();
