@@ -1,14 +1,5 @@
 package TP1.Factory;
 
-import TP1.DAO.ClienteDAO;
-import TP1.DAO.FacturaDAO;
-import TP1.DAO.FacturaProductoDAO;
-import TP1.DAO.ProductoDAO;
-import TP1.Entities.Producto;
-import TP1.Entities.Factura;
-import TP1.Entities.FacturaProducto;
-import TP1.Entities.Cliente;
-
 import java.sql.Connection;
 
 
@@ -16,17 +7,10 @@ public final class ConnectionManagerMYSQL {
     private static final String URL = "jdbc:mysql://localhost:3306/tp1?createDataBaseIfNotExist=true";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
-    private DBType dbType;
 
     private static volatile ConnectionManagerMYSQL instance;
     private Connection conn;
 
-    /*public ConnectionManagerMYSQL(String url, String usuario, String contrasena, DBType dbType) {
-        this.dbType = dbType;
-        URL = url;
-        USUARIO = usuario;
-        PASSWORD = contrasena;
-    }*/
     private ConnectionManagerMYSQL() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -52,10 +36,5 @@ public final class ConnectionManagerMYSQL {
         return instance;
     }
 
-    public Connection getConnection() {
-        return conn;
-    }
-
-
-
+    public Connection getConnection() {return conn;}
 }

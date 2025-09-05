@@ -17,7 +17,10 @@ public abstract class FactoryDAO {
                             instance = new FactoryDAOMySQL();
                             break;
                         //case DERBY:
-                            //instance = new ConnectionManagerPOSTGRESQL();
+                            //instance = new FactoryDAODerby();
+                            //break;
+                        //case POSTGRESQL:
+                            //instance = new FactoryDAOPOSTGRESQL();
                             //break;
                         default:
                             throw new IllegalArgumentException("No se reconoce el tipo de base de datos");
@@ -28,22 +31,6 @@ public abstract class FactoryDAO {
         return instance;
     }
 
-    /*public static FactoryDAO getInstance(){
-        String v = System.getenv("MYSQL");
-        DBType type = DBType.valueOf((v.toUpperCase()));
-        return getInstance(type);
-    }*/
-
-    /*public static FactoryDAO getInstance() {
-        String v = System.getenv("DB_TYPE");
-        if (v == null) {
-            v = "MYSQL"; // valor por defecto
-        }
-        DBType type = DBType.valueOf(v.toUpperCase());
-        return getInstance(type);
-    }*/
-
-    //Factory methods
 
     public abstract ClienteDAO createClienteDAO();
     public abstract FacturaDAO createFacturaDAO();

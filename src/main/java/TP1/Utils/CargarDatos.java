@@ -24,6 +24,7 @@ public class CargarDatos {
         this.facturaDAO = f.createFacturaDAO();
         this.productoDAO = f.createProductoDAO();
         this.facturaProductoDAO = f.createFacturaProductoDAO();
+        cargarDatosCSV();
     }
 
     public void cargarDatosCSV(){
