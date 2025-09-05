@@ -19,8 +19,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
          final String query =
             "CREATE TABLE IF NOT EXISTS Factura(" +
             "idFactura INT NOT NULL," +
-            "idProducto INT NOT NULL," +
-            "cantidad INT NOT NULL," +
+            "idCliente INT NOT NULL," +
             "PRIMARY KEY(idFactura)";
 
          try(Statement st = conn.createStatement()) {
@@ -68,11 +67,12 @@ public class FacturaDAOMySQL implements FacturaDAO {
 
     }
 
-    public boolean borrar(Integer id) {
+
+    public boolean borrar(Factura fEntity) {
         String query = "DELETE FROM Factura WHERE idFactura = ?";
 
         try(PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setInt(1, fEntity.getIdFactura());
             int filasActualizadas = ps.executeUpdate();
             conn.commit();
             conn.close();

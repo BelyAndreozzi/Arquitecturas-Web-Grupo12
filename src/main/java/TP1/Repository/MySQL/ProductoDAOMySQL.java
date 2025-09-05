@@ -76,11 +76,10 @@ public class ProductoDAOMySQL implements ProductoDAO {
         }
     }
 
-    @Override
-    public boolean borrar(Integer id) {
+    public boolean borrar(Producto pEntity) {
         String query = "DELETE FROM Producto WHERE idProducto = ?";
         try(PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setInt(1, pEntity.getIdProducto());
             int filasActualizadas = ps.executeUpdate();
             conn.commit();
             conn.close();
@@ -91,7 +90,6 @@ public class ProductoDAOMySQL implements ProductoDAO {
         }
     }
 
-    @Override
     public Producto obtener(Integer id) {
         String query = "SELECT * FROM Producto WHERE idProducto = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -109,23 +107,22 @@ public class ProductoDAOMySQL implements ProductoDAO {
         }
     }
 
-        @Override
-        public List<Producto> obtenerTodos () {
-            String query = "SELECT * FROM Producto";
-            List<Producto> productos = new java.util.LinkedList<>();
-            try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Producto producto = new Producto(
-                            rs.getInt("idProducto"),
-                            rs.getString("nombre"),
-                            rs.getFloat("valor")
-                    );
-                    productos.add(producto);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException("Error al mostrar los productos", e);
+    public List<Producto> obtenerTodos () {
+        String query = "SELECT * FROM Producto";
+        List<Producto> productos = new java.util.LinkedList<>();
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getString("nombre"),
+                        rs.getFloat("valor")
+                );
+                productos.add(producto);
             }
-            return productos;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al mostrar los productos", e);
         }
+        return productos;
+    }
 }

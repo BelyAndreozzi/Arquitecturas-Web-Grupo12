@@ -95,11 +95,10 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
     }
 
-
-    public boolean borrar(Integer id) {
+    public boolean borrar(Cliente cEntity) {
         String query = "DELETE FROM Cliente WHERE idCliente = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setInt(1, cEntity.getIdCliente());
 
             int filasActualizadas = ps.executeUpdate();
             conn.commit();

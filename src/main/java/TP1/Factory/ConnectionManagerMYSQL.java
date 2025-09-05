@@ -12,7 +12,7 @@ import TP1.Entities.Cliente;
 import java.sql.Connection;
 
 
-public class ConnectionManagerMYSQL {
+public final class ConnectionManagerMYSQL {
     private static final String URL = "jdbc:mysql://localhost:3306/tp1?createDataBaseIfNotExist=true";
     private static final String USUARIO = "root";
     private static final String PASSWORD = "";
