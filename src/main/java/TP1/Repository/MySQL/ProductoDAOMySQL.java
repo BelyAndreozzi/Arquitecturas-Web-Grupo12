@@ -24,7 +24,6 @@ public class ProductoDAOMySQL implements ProductoDAO {
 
          try(Statement st = conn.createStatement()) {
              st.execute(query);
-             conn.commit();
 
          }catch(SQLException e) {
              throw new RuntimeException("Error al crear la tabla producto", e);
@@ -47,7 +46,7 @@ public class ProductoDAOMySQL implements ProductoDAO {
             ps.setFloat(3, producto.getValor());
             ps.executeUpdate();
             ps.close();
-            conn.commit();
+
             System.out.println("Producto insertado exitosamente");
         } catch (Exception e) {
             try {
@@ -68,7 +67,7 @@ public class ProductoDAOMySQL implements ProductoDAO {
             ps.setFloat(2, producto.getValor());
             ps.setInt(3, producto.getIdProducto());
             int filas_actualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
             return filas_actualizadas > 0;
         } catch (SQLException e) {
@@ -81,7 +80,7 @@ public class ProductoDAOMySQL implements ProductoDAO {
         try(PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, pEntity.getIdProducto());
             int filasActualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
 
             return filasActualizadas > 0;

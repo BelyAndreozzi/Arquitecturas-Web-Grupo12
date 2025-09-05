@@ -5,7 +5,9 @@ import TP1.Entities.Cliente;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClienteDAOMySQL implements ClienteDAO {
     private final Connection conn;
@@ -17,31 +19,30 @@ public class ClienteDAOMySQL implements ClienteDAO {
 
     private void crearTablasSiNoExisten() {
         final String query = "CREATE TABLE IF NOT EXISTS Cliente (" +
-                "idCliente INT PRIMARY KEY AUTO_INCREMENT, " +
+                "idCliente INT PRIMARY KEY, " +
                 "nombre VARCHAR(500) NOT NULL, " +
                 "email VARCHAR(150) NOT NULL)";
 
         try(Statement st = conn.createStatement()){
             st.execute(query);
-            conn.commit();
 
-        }catch(SQLException e){
+        } catch(SQLException e) {
             throw new RuntimeException("Error al crear la tabla Cliente", e);
         }
     }
 
-    public ArrayList<Cliente> clientesOrdenadosPorFacturacion() throws Exception {
+    public List<Map<String, Object>> clientesOrdenadosPorFacturacion() throws Exception {
         String query =
                 "SELECT c.idCliente, c.nombre, c.email, " +
-                "       SUM(fp.cantidad * p.valor) AS totalFacturado " +
-                "FROM Cliente c " +
-                "JOIN Factura f ON c.idCliente = f.idCliente " +
-                "JOIN Factura_Producto fp ON f.idFactura = fp.idFactura " +
-                "JOIN Producto p ON fp.idProducto = p.idProducto " +
-                "GROUP BY c.idCliente, c.nombre, c.email " +
-                "ORDER BY totalFacturado DESC";
+                        "       SUM(fp.cantidad * p.valor) AS totalFacturado " +
+                        "FROM Cliente c " +
+                        "JOIN Factura f ON c.idCliente = f.idCliente " +
+                        "JOIN FacturaProducto fp ON f.idFactura = fp.idFactura " +
+                        "JOIN Producto p ON fp.idProducto = p.idProducto " +
+                        "GROUP BY c.idCliente, c.nombre, c.email " +
+                        "ORDER BY totalFacturado DESC";
 
-        ArrayList<Cliente> clientes = new ArrayList<>();
+        List<Map<String, Object>> clientesConTotal = new ArrayList<>();
 
         try (PreparedStatement ps = conn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -52,14 +53,18 @@ public class ClienteDAOMySQL implements ClienteDAO {
                         rs.getString("nombre"),
                         rs.getString("email")
                 );
-                clientes.add(cliente);
+                clientesConTotal.add(
+                        Map.of("cliente", cliente,
+                                "totalFacturado", rs.getDouble("totalFacturado")
+                        )
+                );
             }
 
         } catch (SQLException e) {
-            throw new Exception("Error al mostrar clientes", e);
+            throw new Exception("Error al mostrar clientes ordenados por facturación", e);
         }
 
-        return clientes;
+        return clientesConTotal;
     }
 
     public void insertar(Cliente cliente) {
@@ -71,7 +76,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
             ps.setString(3, cliente.getEmail());
             ps.executeUpdate();
             ps.close();
-            conn.commit();
+
             System.out.println("Cliente insertado exitosamente");
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar el cliente", e);
@@ -86,7 +91,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
             ps.setInt(3, cliente.getIdCliente());
 
             int filasActualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
 
             return filasActualizadas > 0;
@@ -101,7 +106,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
             ps.setInt(1, cEntity.getIdCliente());
 
             int filasActualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
 
             return filasActualizadas > 0;

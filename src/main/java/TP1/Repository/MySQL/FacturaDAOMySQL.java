@@ -18,13 +18,12 @@ public class FacturaDAOMySQL implements FacturaDAO {
     private void crearTablasSiNoExisten() {
          final String query =
             "CREATE TABLE IF NOT EXISTS Factura(" +
-            "idFactura INT NOT NULL," +
-            "idCliente INT NOT NULL," +
-            "PRIMARY KEY(idFactura)";
+            "idFactura INT NOT NULL, " +
+            "idCliente INT NOT NULL, " +
+            "PRIMARY KEY(idFactura))";
 
          try(Statement st = conn.createStatement()) {
              st.execute(query);
-             conn.commit();
 
          }catch(SQLException e) {
              throw new RuntimeException("Error al crear la tabla factura", e);
@@ -38,7 +37,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
             ps.setInt(2, factura.getIdCliente());
             ps.executeUpdate();
             ps.close();
-            conn.commit();
+
             System.out.println("factura insertada exitosamente");
         } catch (Exception e) {
             try {
@@ -57,7 +56,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
             ps.setInt(2, factura.getIdCliente());
 
             int filas_actualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
             return filas_actualizadas > 0;
 
@@ -74,7 +73,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
         try(PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, fEntity.getIdFactura());
             int filasActualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
 
             return filasActualizadas > 0;

@@ -29,10 +29,10 @@ public class CargarDatos {
 
     public void cargarDatosCSV(){
         try {
-            leerDatosClientes("/DBData/clientes.csv");
-            leerDatosProductos("/DBData/productos.csv");
-            leerDatosFacturas("/DBData/facturas.csv");
-            leerDatosFacturasProducto("/DBData/facturas-productos.csv");
+            leerDatosClientes("src/main/resources/DBData/clientes.csv");
+            leerDatosProductos("src/main/resources/DBData/productos.csv");
+            leerDatosFacturas("src/main/resources/DBData/facturas.csv");
+            leerDatosFacturasProducto("src/main/resources/DBData/facturas-productos.csv");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

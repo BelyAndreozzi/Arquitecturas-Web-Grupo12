@@ -21,11 +21,10 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
                         "idFactura INT NOT NULL," +
                         "idProducto INT NOT NULL," +
                         "cantidad INT NOT NULL," +
-                        "PRIMARY KEY(idFactura, idProducto)";
+                        "PRIMARY KEY(idFactura, idProducto))";
 
         try(Statement st = conn.createStatement()) {
             st.execute(query);
-            conn.commit();
 
         }catch(SQLException e) {
             throw new RuntimeException("Error al crear la tabla FacturaProducto", e);
@@ -41,8 +40,8 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
             ps.setInt(3, facturaProducto.getCantidad());
             ps.executeUpdate();
             ps.close();
-            conn.commit();
-            System.out.println("factura insertada exitosamente");
+
+            System.out.println("factura-producto insertada exitosamente");
         } catch (Exception e) {
             try {
                 conn.rollback();//Revierte si algo falla y no cierra la conexion
@@ -61,7 +60,7 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
             ps.setInt(3, facturaProducto.getCantidad());
 
             int filas_actualizadas = ps.executeUpdate();
-            conn.commit();
+
             conn.close();
             return filas_actualizadas > 0;
 

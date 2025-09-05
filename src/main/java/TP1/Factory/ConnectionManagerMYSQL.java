@@ -6,7 +6,7 @@ import java.sql.Connection;
 public final class ConnectionManagerMYSQL {
     private static final String URL = "jdbc:mysql://localhost:3306/tp1?createDataBaseIfNotExist=true";
     private static final String USUARIO = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "SQLPassword";
 
     private static volatile ConnectionManagerMYSQL instance;
     private Connection conn;

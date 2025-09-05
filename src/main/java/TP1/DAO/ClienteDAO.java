@@ -2,10 +2,10 @@ package TP1.DAO;
 
 import TP1.Entities.Cliente;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface ClienteDAO extends CRUD_DAO<Cliente, Integer> {
-    ArrayList<Cliente> clientesOrdenadosPorFacturacion() throws Exception;
+    List<Map<String, Object>> clientesOrdenadosPorFacturacion() throws Exception;
 
 }

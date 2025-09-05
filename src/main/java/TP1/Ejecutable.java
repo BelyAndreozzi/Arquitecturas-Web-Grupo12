@@ -5,10 +5,14 @@ import TP1.Entities.*;
 import TP1.Factory.*;
 import TP1.Repository.MySQL.*;
 import TP1.Utils.*;
-import java.util.List;
 
-public class Main {
-    public static void main(String[] args) {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class Ejecutable {
+    public static void main(String[] args) throws Exception {
+
         // Obtenemos la fábrica para MySQL
         FactoryDAO factory = FactoryDAO.getInstance(DBType.MYSQL);
 
@@ -21,8 +25,15 @@ public class Main {
         //Cargar Datos
         CargarDatos cargarDatos = new CargarDatos();
 
-        // 5. Consultar datos
-        System.out.println("\n=== Clientes ===");
+        //Escriba un programa JDBC que retorne el producto que más recaudó. Se define “recaudación” como cantidad de productos vendidos multiplicado por su valor.
+
+
+        //Escriba un programa JDBC que imprima una lista de clientes, ordenada por a cuál se le facturó más.
+        List<Map<String, Object>> clientesOrdenados = clienteDAO.clientesOrdenadosPorFacturacion();
+        clientesOrdenados.forEach(System.out::println);
+
+        // Consultar datos
+       /* System.out.println("\n=== Clientes ===");
         List<Cliente> clientes = clienteDAO.obtenerTodos();
         for (Cliente c : clientes) {
             System.out.println(c);
@@ -45,7 +56,7 @@ public class Main {
         for (FacturaProducto f : fps) {
             System.out.println(f);
         }
-
+*/
 
     }
 }
