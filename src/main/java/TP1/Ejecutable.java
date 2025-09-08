@@ -22,9 +22,12 @@ public class Ejecutable {
         FacturaDAO facturaDAO = factory.createFacturaDAO();
         FacturaProductoDAO facturaProductoDAO = factory.createFacturaProductoDAO();
 
+        //Crear tablas
+        CrearTablas crearTablas = new CrearTablas(ConnectionManagerMYSQL.getInstance().getConnection());
+
         //Cargar Datos
         CargarDatos cargarDatos = new CargarDatos();
-        cargarDatos.cargarDatosCSV(true); // Limpiar y cargar datos
+        cargarDatos.cargarDatosCSV(); // Limpiar y cargar datos
 
         //Escriba un programa JDBC que retorne el producto que más recaudó. Se define “recaudación” como cantidad de productos vendidos multiplicado por su valor.
 

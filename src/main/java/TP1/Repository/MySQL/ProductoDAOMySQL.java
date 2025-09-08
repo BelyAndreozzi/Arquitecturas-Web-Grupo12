@@ -8,12 +8,18 @@ import java.util.List;
 
 public class ProductoDAOMySQL implements ProductoDAO {
     private final Connection conn;
+    private static ProductoDAOMySQL instance;
 
-    public  ProductoDAOMySQL(Connection conn) {
+    private ProductoDAOMySQL(Connection conn) {
         this.conn = conn;
-        crearTablasSiNoExisten();
-    }
 
+    }
+    public static ProductoDAOMySQL getInstance(Connection conn) {
+        if (instance == null) {
+            instance = new ProductoDAOMySQL(conn);
+        }
+        return instance;
+    }/*
     private void crearTablasSiNoExisten() {
          final String query =
             "CREATE TABLE IF NOT EXISTS Producto(" +
@@ -29,10 +35,11 @@ public class ProductoDAOMySQL implements ProductoDAO {
              throw new RuntimeException("Error al crear la tabla producto", e);
          }
     }
+    :D */
 
     @Override
     public Producto productoQueMasRecaudo() throws Exception {
-        /* NO HAGAN ESTE ASI LO HACEMOS TODOS JUNTOS <3 */
+        /* NO HAGAN ESTE ASI LO HACEMOS TODOS JUNTOS <3 UwU */
         return null;
     }
 

@@ -11,13 +11,18 @@ import java.util.Map;
 
 public class ClienteDAOMySQL implements ClienteDAO {
     private final Connection conn;
+    private static  ClienteDAOMySQL instance;
 
-    public ClienteDAOMySQL(Connection conn) {
+    private ClienteDAOMySQL(Connection conn) {
         this.conn = conn;
-        crearTablasSiNoExisten();
     }
-
-    private void crearTablasSiNoExisten() {
+    public static ClienteDAOMySQL getInstance(Connection conn) {
+        if (instance == null) {
+            instance = new ClienteDAOMySQL(conn);
+        }
+        return  instance;
+    }
+    /*private void crearTablasSiNoExisten() {
         final String query = "CREATE TABLE IF NOT EXISTS Cliente (" +
                 "idCliente INT PRIMARY KEY, " +
                 "nombre VARCHAR(500) NOT NULL, " +
@@ -29,7 +34,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         } catch(SQLException e) {
             throw new RuntimeException("Error al crear la tabla Cliente", e);
         }
-    }
+    }*/
 
     public List<Map<String, Object>> clientesOrdenadosPorFacturacion() throws Exception {
         String query =

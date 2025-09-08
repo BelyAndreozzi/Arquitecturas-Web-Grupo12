@@ -2,20 +2,27 @@ package TP1.Repository.MySQL;
 
 import TP1.DAO.FacturaProductoDAO;
 import TP1.Entities.FacturaProducto;
+import TP1.Entities.FacturaProductoIDs;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
-
+    private static FacturaProductoDAOMySQL instance;
     private final Connection conn;
     
-    public  FacturaProductoDAOMySQL(Connection conn) {
+    private  FacturaProductoDAOMySQL(Connection conn) {
         this.conn = conn;
-        crearTablasSiNoExisten();
     }
-    private void crearTablasSiNoExisten() {
+
+    public static FacturaProductoDAOMySQL getInstance(Connection conn) {
+        if (instance == null) {
+            instance = new FacturaProductoDAOMySQL(conn);
+        }
+        return instance;
+    }
+    /*private void crearTablasSiNoExisten() {
         final String query =
                 "CREATE TABLE IF NOT EXISTS FacturaProducto(" +
                         "idFactura INT NOT NULL," +
@@ -29,7 +36,7 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
         }catch(SQLException e) {
             throw new RuntimeException("Error al crear la tabla FacturaProducto", e);
         }
-    }
+    }*/
 
     public void insertar(FacturaProducto facturaProducto) {
         String query = "INSERT INTO FacturaProducto(idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
@@ -81,10 +88,11 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
         }
     }
 
-    public FacturaProducto obtener(Integer idFactura) {
+    public FacturaProducto obtener(FacturaProductoIDs iDs) {
         String query = "SELECT * FROM FacturaProducto WHERE idFactura = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, idFactura);
+            ps.setInt(1, iDs.getIdFactura());
+            ps.setInt(2, iDs.getIdProducto());
             try (ResultSet rs = ps.executeQuery()) {
                 FacturaProducto fp = new FacturaProducto(
                         rs.getInt("idFactura"),

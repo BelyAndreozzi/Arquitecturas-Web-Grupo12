@@ -9,13 +9,20 @@ import java.util.List;
 
 public class FacturaDAOMySQL implements FacturaDAO {
     private final Connection conn;
+    private static FacturaDAOMySQL instance;
 
-    public FacturaDAOMySQL(Connection conn) {
+    private FacturaDAOMySQL(Connection conn) {
         this.conn = conn;
-        crearTablasSiNoExisten();
+
     }
 
-    private void crearTablasSiNoExisten() {
+    public static FacturaDAOMySQL getInstance(Connection conn) {
+        if(instance == null) {
+            instance = new FacturaDAOMySQL(conn);
+        }
+        return instance;
+    }
+    /*private void crearTablasSiNoExisten() {
          final String query =
             "CREATE TABLE IF NOT EXISTS Factura(" +
             "idFactura INT NOT NULL, " +
@@ -28,7 +35,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
          }catch(SQLException e) {
              throw new RuntimeException("Error al crear la tabla factura", e);
          }
-    }
+    }*/
     public void insertar(Factura factura) {
         String query = "INSERT INTO Factura(idFactura, idCliente) VALUES (?, ?)";
 

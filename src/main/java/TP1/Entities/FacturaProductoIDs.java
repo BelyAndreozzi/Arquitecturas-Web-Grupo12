@@ -6,8 +6,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
-public class FacturaProducto {
+public class FacturaProductoIDs {
     private int idFactura;
     private int idProducto;
-    private int cantidad;
 }

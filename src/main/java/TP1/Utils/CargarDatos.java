@@ -29,6 +29,7 @@ public class CargarDatos {
 
     public void cargarDatosCSV(){
         try {
+            DatabaseCleaner.limpiarBaseDeDatos();
             leerDatosClientes("src/main/resources/DBData/clientes.csv");
             leerDatosProductos("src/main/resources/DBData/productos.csv");
             leerDatosFacturas("src/main/resources/DBData/facturas.csv");
@@ -38,11 +39,6 @@ public class CargarDatos {
         }
     }
 
-    public void cargarDatosCSV(boolean limpiar){
-        if (limpiar) {
-            DatabaseCleaner.limpiarBaseDeDatos();
-        } cargarDatosCSV();
-    }
 
     public void leerDatosClientes (String resourcePath) throws IOException {
         CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader(resourcePath));

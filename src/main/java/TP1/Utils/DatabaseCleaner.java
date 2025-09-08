@@ -41,7 +41,6 @@ public class DatabaseCleaner {
             }
         }
 
-
         System.out.println("Base de datos limpiada.");
     }
 }
