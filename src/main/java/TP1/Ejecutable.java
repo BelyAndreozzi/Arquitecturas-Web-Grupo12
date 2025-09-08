@@ -24,6 +24,7 @@ public class Ejecutable {
 
         //Cargar Datos
         CargarDatos cargarDatos = new CargarDatos();
+        cargarDatos.cargarDatosCSV(true); // Limpiar y cargar datos
 
         //Escriba un programa JDBC que retorne el producto que más recaudó. Se define “recaudación” como cantidad de productos vendidos multiplicado por su valor.
 

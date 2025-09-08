@@ -38,6 +38,12 @@ public class CargarDatos {
         }
     }
 
+    public void cargarDatosCSV(boolean limpiar){
+        if (limpiar) {
+            DatabaseCleaner.limpiarBaseDeDatos();
+        } cargarDatosCSV();
+    }
+
     public void leerDatosClientes (String resourcePath) throws IOException {
         CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader(resourcePath));
         for(CSVRecord row: parser) {
