@@ -4,6 +4,7 @@ import TP1.DAO.ProductoDAO;
 import TP1.Entities.Producto;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDAOMySQL implements ProductoDAO {
@@ -19,28 +20,37 @@ public class ProductoDAOMySQL implements ProductoDAO {
             instance = new ProductoDAOMySQL(conn);
         }
         return instance;
-    }/*
-    private void crearTablasSiNoExisten() {
-         final String query =
-            "CREATE TABLE IF NOT EXISTS Producto(" +
-            "idProducto INT NOT NULL," +
-            "nombre VARCHAR(100) NOT NULL," +
-            "valor FLOAT NOT NULL," +
-            "PRIMARY KEY(idProducto))";
-
-         try(Statement st = conn.createStatement()) {
-             st.execute(query);
-
-         }catch(SQLException e) {
-             throw new RuntimeException("Error al crear la tabla producto", e);
-         }
     }
-    :D */
 
-    @Override
+    //Escriba un programa JDBC que retorne el producto que más recaudó. Se define “recaudación”
+    //como cantidad de productos vendidos multiplicado por su valor.
     public Producto productoQueMasRecaudo() throws Exception {
-        /* NO HAGAN ESTE ASI LO HACEMOS TODOS JUNTOS <3 UwU */
-        return null;
+        String query =
+                "SELECT p.idProducto, p.nombre, p.valor, " +
+                        "       SUM(fp.cantidad * p.valor) AS totalRecaudado " +
+                        "FROM Producto p " +
+                        "JOIN FacturaProducto fp ON p.idProducto = fp.idProducto " +
+                        "GROUP BY p.idProducto, p.nombre, p.valor " +
+                        "ORDER BY totalRecaudado DESC " +
+                        "LIMIT 1";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getString("nombre"),
+                        rs.getFloat("valor")
+                );
+                return producto;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al mostrar el producto que mas recaudo" ,e);
+        }
+
+
     }
 
     @Override

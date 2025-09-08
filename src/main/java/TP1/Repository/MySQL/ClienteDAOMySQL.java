@@ -22,19 +22,6 @@ public class ClienteDAOMySQL implements ClienteDAO {
         }
         return  instance;
     }
-    /*private void crearTablasSiNoExisten() {
-        final String query = "CREATE TABLE IF NOT EXISTS Cliente (" +
-                "idCliente INT PRIMARY KEY, " +
-                "nombre VARCHAR(500) NOT NULL, " +
-                "email VARCHAR(150) NOT NULL)";
-
-        try(Statement st = conn.createStatement()){
-            st.execute(query);
-
-        } catch(SQLException e) {
-            throw new RuntimeException("Error al crear la tabla Cliente", e);
-        }
-    }*/
 
     public List<Map<String, Object>> clientesOrdenadosPorFacturacion() throws Exception {
         String query =

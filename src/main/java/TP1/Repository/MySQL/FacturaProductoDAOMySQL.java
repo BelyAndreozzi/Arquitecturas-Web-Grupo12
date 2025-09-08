@@ -22,21 +22,6 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
         }
         return instance;
     }
-    /*private void crearTablasSiNoExisten() {
-        final String query =
-                "CREATE TABLE IF NOT EXISTS FacturaProducto(" +
-                        "idFactura INT NOT NULL," +
-                        "idProducto INT NOT NULL," +
-                        "cantidad INT NOT NULL," +
-                        "PRIMARY KEY(idFactura, idProducto))";
-
-        try(Statement st = conn.createStatement()) {
-            st.execute(query);
-
-        }catch(SQLException e) {
-            throw new RuntimeException("Error al crear la tabla FacturaProducto", e);
-        }
-    }*/
 
     public void insertar(FacturaProducto facturaProducto) {
         String query = "INSERT INTO FacturaProducto(idFactura, idProducto, cantidad) VALUES (?, ?, ?)";

@@ -22,20 +22,7 @@ public class FacturaDAOMySQL implements FacturaDAO {
         }
         return instance;
     }
-    /*private void crearTablasSiNoExisten() {
-         final String query =
-            "CREATE TABLE IF NOT EXISTS Factura(" +
-            "idFactura INT NOT NULL, " +
-            "idCliente INT NOT NULL, " +
-            "PRIMARY KEY(idFactura))";
 
-         try(Statement st = conn.createStatement()) {
-             st.execute(query);
-
-         }catch(SQLException e) {
-             throw new RuntimeException("Error al crear la tabla factura", e);
-         }
-    }*/
     public void insertar(Factura factura) {
         String query = "INSERT INTO Factura(idFactura, idCliente) VALUES (?, ?)";
 

@@ -30,7 +30,8 @@ public class Ejecutable {
         cargarDatos.cargarDatosCSV(); // Limpiar y cargar datos
 
         //Escriba un programa JDBC que retorne el producto que más recaudó. Se define “recaudación” como cantidad de productos vendidos multiplicado por su valor.
-
+        Producto productoMasRecaudado = productoDAO.productoQueMasRecaudo();
+        System.out.println(productoMasRecaudado);
 
         //Escriba un programa JDBC que imprima una lista de clientes, ordenada por a cuál se le facturó más.
         List<Map<String, Object>> clientesOrdenados = clienteDAO.clientesOrdenadosPorFacturacion();
