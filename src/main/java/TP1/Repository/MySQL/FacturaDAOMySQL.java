@@ -2,7 +2,6 @@ package TP1.Repository.MySQL;
 
 import TP1.DAO.FacturaDAO;
 import TP1.Entities.Factura;
-
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,16 +29,31 @@ public class FacturaDAOMySQL implements FacturaDAO {
             ps.setInt(1, factura.getIdFactura());
             ps.setInt(2, factura.getIdCliente());
             ps.executeUpdate();
-            ps.close();
 
             System.out.println("factura insertada exitosamente");
         } catch (Exception e) {
             try {
-                conn.rollback();//Revierte si algo falla y no cierra la conexion
+                conn.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
             throw new RuntimeException("Error al insertar la factura", e);
+        }
+    }
+
+    public void insertarTodos(List<Factura> facturas) {
+        String query = "INSERT INTO Factura(idFactura, idCliente) VALUES (?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (Factura factura : facturas) {
+                ps.setInt(1, factura.getIdFactura());
+                ps.setInt(2, factura.getIdCliente());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+
+            System.out.println("Facturas insertadas exitosamente");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar las facturas", e);
         }
     }
 
@@ -59,7 +73,6 @@ public class FacturaDAOMySQL implements FacturaDAO {
         }
 
     }
-
 
     public boolean borrar(Factura fEntity) {
         String query = "DELETE FROM Factura WHERE idFactura = ?";

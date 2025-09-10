@@ -1,6 +1,5 @@
 package TP1.Entities;
 
-import TP1.DAO.FacturaDAO;
 import lombok.*;
 
 @Getter

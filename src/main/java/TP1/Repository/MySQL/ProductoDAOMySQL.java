@@ -2,10 +2,10 @@ package TP1.Repository.MySQL;
 
 import TP1.DAO.ProductoDAO;
 import TP1.Entities.Producto;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductoDAOMySQL implements ProductoDAO {
     private final Connection conn;
@@ -49,11 +49,43 @@ public class ProductoDAOMySQL implements ProductoDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al mostrar el producto que mas recaudo" ,e);
         }
-
-
     }
 
-    @Override
+    //La usamos para checkear el número del total recaudado
+    public List<Map<String, Object>> productosOrdenadosPorFacturacion() throws Exception {
+        String query =
+                "SELECT p.idProducto, p.nombre, p.valor, " +
+                        "       SUM(fp.cantidad * p.valor) AS totalRecaudado " +
+                        "FROM Producto p " +
+                        "JOIN FacturaProducto fp ON p.idProducto = fp.idProducto " +
+                        "GROUP BY p.idProducto, p.nombre, p.valor " +
+                        "ORDER BY totalRecaudado DESC ";
+
+        List<Map<String, Object>> productosConTotal = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getString("nombre"),
+                        rs.getFloat("valor")
+                );
+                productosConTotal.add(
+                        Map.of("Producto", producto,
+                                "totalRecaudado", rs.getDouble("totalRecaudado")
+                        )
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new Exception("Error al mostrar productos ordenados por facturación", e);
+        }
+
+        return productosConTotal;
+    }
+
     public void insertar(Producto producto) {
         String query = "INSERT INTO Producto(idProducto, nombre, valor) VALUES (?, ?, ?)";
 
@@ -62,9 +94,8 @@ public class ProductoDAOMySQL implements ProductoDAO {
             ps.setString(2, producto.getNombre());
             ps.setFloat(3, producto.getValor());
             ps.executeUpdate();
-            ps.close();
 
-            System.out.println("Producto insertado exitosamente");
+            /*System.out.println("Producto insertado exitosamente");*/
         } catch (Exception e) {
             try {
                 conn.rollback();//Revierte si algo falla y no cierra la conexion
@@ -75,8 +106,28 @@ public class ProductoDAOMySQL implements ProductoDAO {
         }
     }
 
+    public void insertarTodos(List<Producto> productos) {
+        String query = "INSERT INTO Producto(idProducto, nombre, valor) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (Producto producto : productos) {
+                ps.setInt(1, producto.getIdProducto());
+                ps.setString(2, producto.getNombre());
+                ps.setFloat(3, producto.getValor());
+                ps.addBatch();
+            }
+            ps.executeBatch();
 
-    @Override
+            System.out.println("Productos insertados exitosamente");
+        } catch (SQLException e) {
+            try {
+                conn.rollback();//Revierte si algo falla y no cierra la conexion
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException("Error al insertar los productos", e);
+        }
+    }
+
     public boolean actualizar(Producto producto) {
         String query = "UPDATE Producto SET nombre = ?, valor = ? WHERE idProducto = ?";
         try(PreparedStatement ps = conn.prepareStatement(query)) {

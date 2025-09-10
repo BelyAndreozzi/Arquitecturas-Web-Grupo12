@@ -3,7 +3,6 @@ package TP1.Repository.MySQL;
 import TP1.DAO.FacturaProductoDAO;
 import TP1.Entities.FacturaProducto;
 import TP1.Entities.FacturaProductoIDs;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +30,34 @@ public class FacturaProductoDAOMySQL implements FacturaProductoDAO {
             ps.setInt(2, facturaProducto.getIdProducto());
             ps.setInt(3, facturaProducto.getCantidad());
             ps.executeUpdate();
-            ps.close();
 
             System.out.println("factura-producto insertada exitosamente");
         } catch (Exception e) {
             try {
-                conn.rollback();//Revierte si algo falla y no cierra la conexion
+                conn.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
             throw new RuntimeException("Error al insertar la factura", e);
         }
     }
+
+    public void insertarTodos(List<FacturaProducto> facturaProductos) {
+        String query = "INSERT INTO FacturaProducto (idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (FacturaProducto fp : facturaProductos) {
+                ps.setInt(1, fp.getIdFactura());
+                ps.setInt(2, fp.getIdProducto());
+                ps.setInt(3, fp.getCantidad());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            System.out.println("Facturas Productos insertados exitosamente");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar todos los FacturaProducto", e);
+        }
+    }
+
 
     public boolean actualizar(FacturaProducto facturaProducto) {
         String query = "UPDATE FacturaProducto SET idFactura = ?, idProducto = ?, cantidad = ?";

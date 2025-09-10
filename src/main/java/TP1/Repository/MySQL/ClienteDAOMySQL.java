@@ -2,10 +2,8 @@ package TP1.Repository.MySQL;
 
 import TP1.DAO.ClienteDAO;
 import TP1.Entities.Cliente;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +72,23 @@ public class ClienteDAOMySQL implements ClienteDAO {
             throw new RuntimeException("Error al insertar el cliente", e);
         }
     }
+    
+    public void insertarTodos(List<Cliente> clientes) {
+        String query = "INSERT INTO Cliente(idCliente, nombre, email) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (Cliente cliente : clientes) {
+                ps.setInt(1, cliente.getIdCliente());
+                ps.setString(2, cliente.getNombre());
+                ps.setString(3, cliente.getEmail());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+
+            System.out.println("Clientes insertados exitosamente");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar los clientes", e);
+        }
+    }
 
     public boolean actualizar(Cliente cliente) {
         String query = "UPDATE Cliente SET nombre =  ?, email = ? WHERE idCliente = ?";
@@ -125,7 +140,7 @@ public class ClienteDAOMySQL implements ClienteDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al mostrar el cliente", e);
         }
-        return null; // si no encuentra nada
+        return null;
     }
 
     public List<Cliente> obtenerTodos() {

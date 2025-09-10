@@ -25,7 +25,6 @@ public class CrearTablas {
 
         try(Statement st = conn.createStatement()) {
             st.execute(query);
-
         }catch(SQLException e) {
             throw new RuntimeException("Error al crear la tabla producto", e);
         }
