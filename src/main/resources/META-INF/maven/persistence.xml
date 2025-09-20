@@ -1,0 +1,13 @@
+<persistence>
+    <persistence-unit name="my_persistence_unit">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:MyDataBase;create=true" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="root" />
+        </properties>
+        <class>com.tudai.Cliente</class> <!-- <mapping-file>\META-INF\mapping.xml</class> -->
+        <class>com.tudai.Equipo</class>
+    </persistence-unit>
+</persistence>
