@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @ToString
 @AllArgsConstructor
+
 public class Cliente{
     private int idCliente;
     private String nombre;
